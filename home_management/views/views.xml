@@ -1,0 +1,165 @@
+<odoo>
+    <data>
+        <record id="home_management_kanban" model="ir.ui.view">
+            <field name="name">home_management.kanban</field>
+            <field name="model">home.management</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="name"/>
+                    <field name="age"/>
+                    <field name="date"/>
+                    <field name="state"/>
+                    <field name="selection"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <ol>
+                                    <li>
+                                        <field name="name"/>
+                                    </li>
+                                    <li>
+                                        <field name="age"/>
+                                    </li>
+                                    <li>
+                                        <field name="date"/>
+                                    </li>
+                                    <li>
+                                        <field name="state"/>
+                                    </li>
+                                    <li>
+                                        <field name="selection"/>
+                                    </li>
+                                </ol>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!-- explicit list view definition -->
+
+        <record model="ir.ui.view" id="home_management.tree">
+            <field name="name">home_management tree</field>
+            <field name="model">home.management</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="age"/>
+                    <field name="date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="home_management_search_view" model="ir.ui.view">
+            <field name="name">home.management.search</field>
+            <field name="model">home.management</field>
+            <field name="arch" type="xml">
+                <search string="Search Home Management">
+                    <field name="name"/>
+                    <field name="state"/>
+                    <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="filter_posted" string="Posted" domain="[('state', '=', 'posted')]"/>
+                    <filter name="filter_male" string="Male" domain="[('selection', '=', 'male')]"/>
+                    <filter name="filter_female" string="Female" domain="[('state', '=', 'female')]"/>
+                    <group string="Group By">
+                        <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                        <filter name="group_by_state" string="Selection" context="{'group_by': 'selection'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="home_management.form">
+            <field name="name">home_management form</field>
+            <field name="model">home.management</field>
+            <field name="arch" type="xml">
+
+
+                <form>
+                    <header>
+                        <button name="check_orm" string="Check ORM" type="object" class="btn-danger"/>
+                        <button id="button_draft" name="action_draft" string="Draft" type="object" class="btn-primary"/>
+                        <button id="button_posted" name="action_posted" string="Posted" type="object"
+                                class="btn-success"/>
+                        <field name="state" widget="statusbar" nolable="1" statusbar_visible="draft,posted"/>
+                    </header>
+                    <sheet>
+
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="age"/>
+                                <field name="add_id"/>
+
+                            </group>
+                            <group>
+                                <field name="adding_ids" widget="many2many_tags"/>
+                                <field name="date"/>
+                                <field name="state"/>
+                                <field name="selection"/>
+                            </group>
+                        </group>
+
+                    </sheet>
+
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" options="{'open_attachments': True}"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+
+                </form>
+
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+
+        <record model="ir.actions.act_window" id="home_management.action_window">
+            <field name="name">home_management window</field>
+            <field name="res_model">home.management</field>
+            <field name="view_mode">tree,form,kanban</field>
+        </record>
+
+        <!-- server action to the one above -->
+        <!--
+            <record model="ir.actions.server" id="home_management.action_server">
+              <field name="name">home_management server</field>
+              <field name="model_id" ref="model_home_management_home_management"/>
+              <field name="state">code</field>
+              <field name="code">
+                action = {
+                  "type": "ir.actions.act_window",
+                  "view_mode": "tree,form",
+                  "res_model": model._name,
+                }
+              </field>
+            </record>
+        -->
+
+        <!-- Top menu item -->
+
+        <menuitem name="home_management"
+                  id="home_management.menu_root"/>
+        <!-- menu categories -->
+
+        <menuitem name="Menu 1"
+                  id="home_management.menu_1"
+                  parent="home_management.menu_root"/>
+        <menuitem name="Menu 2"
+                  id="home_management.menu_2"
+                  action="home_management.action_window"
+                  parent="home_management.menu_1"/>
+
+        <!-- actions -->
+        <!--
+            <menuitem name="List" id="home_management.menu_1_list" parent="home_management.menu_1"
+                      action="home_management.action_window"/>
+            <menuitem name="Server to list" id="home_management" parent="home_management.menu_2"
+                      action="home_management.action_server"/>
+        -->
+    </data>
+</odoo>
